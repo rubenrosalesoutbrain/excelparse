@@ -26,7 +26,7 @@ var main = function() {
   getScript();
     function getScript(){
       $.post("users/getScript",function(response){
-
+           // JSON.stringify(response);
               printScript(response);
              
               //console.log(response);
@@ -34,11 +34,11 @@ var main = function() {
           });
     }
     function printScript(script){
-      console.log(script.script['1000328717'])
+      console.log(JSON.stringify(script))
       // for each (var item in script) {
       //   //console.log(item)
       // }
 
-      // $("#script").append(JSON.stringify(response.script))
+       $("#script").append(JSON.stringify(script.script))
     }
 };
