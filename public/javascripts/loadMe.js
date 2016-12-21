@@ -26,9 +26,19 @@ var main = function() {
   getScript();
     function getScript(){
       $.post("users/getScript",function(response){
-              $("#script").append(JSON.stringify(response.script))
-              console.log(response);
+
+              printScript(response);
+             
+              //console.log(response);
             
           });
+    }
+    function printScript(script){
+      console.log(script.script['1000328717'])
+      // for each (var item in script) {
+      //   //console.log(item)
+      // }
+
+      // $("#script").append(JSON.stringify(response.script))
     }
 };

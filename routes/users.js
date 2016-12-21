@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var cheerio = require('cheerio');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 
@@ -31,13 +31,15 @@ function loadExcel() {
         if (pixels.length > 0) {
          store[campaign_id] = printScript(pixels,campaign_id);
          //  = pixels;
+
           pixels = [];
         }
         prev_campaign_id = campaign_id;
         campaign_id = JSON.stringify(worksheet[z].v);
       } else {
         if (campaign_id !== 0) {
-          pixels.push(JSON.stringify(worksheet[z].v));
+         
+          pixels.push(worksheet[z].v);
         }
       }
     }
@@ -56,11 +58,21 @@ function printScript(pixels, campaign_id) {
 
 	 var limiter = 1;
 	 var temp = "'";
-
+   var phrase = "src";
+   var regex = /SRC=(.*)/;
 
 	for(idx in pixels){
-		temp += pixels[idx].replace(/['"]+/g, '')
+    //dummy load will remove
+    var $ = cheerio.load('');//(pixels[idx].replace(/^"(.+(?="$))"$/, '$1'));
+
 		
+    if($(pixels[idx]).attr('src')){
+      temp += $(pixels[idx]).attr('src');
+    }
+    else{
+      temp+= pixels[idx];
+    }
+    
 		if (limiter < pixels.length) {
         	temp += " ";
       }
