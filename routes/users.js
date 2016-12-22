@@ -8,8 +8,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/getScript', function (req, res){
-	   var script = loadExcel();
-	   res.json({'script': script});
+     var script = loadExcel();
+     res.json({'script': script});
 });
 
 
@@ -28,14 +28,17 @@ function loadExcel() {
       if (z[0] === '!') continue;
       if (isNumeric(JSON.stringify(worksheet[z].v))) {
         //console.log((JSON.stringify(worksheet[z].v)))
-        if (pixels.length > 0) {
-         store[campaign_id] = printScript(pixels,campaign_id);
+               prev_campaign_id = campaign_id;
+        campaign_id = JSON.stringify(worksheet[z].v);
+        if (pixels.length > 0 && prev_campaign_id != 0 && prev_campaign_id !== campaign_id) {
+          // console.log(campaign_id)
+          // console.log(prev_campaign_id)
+          // console.log(pixels)
+         store[prev_campaign_id] = printScript(pixels,prev_campaign_id);
          //  = pixels;
-
           pixels = [];
         }
-        prev_campaign_id = campaign_id;
-        campaign_id = JSON.stringify(worksheet[z].v);
+ 
       } else {
         if (campaign_id !== 0) {
          
@@ -44,7 +47,7 @@ function loadExcel() {
       }
     }
     if (prev_campaign_id != campaign_id) {
-	 store[campaign_id] = printScript(pixels, campaign_id)
+   store[campaign_id] = printScript(pixels, campaign_id)
     }
     //console.log(store);
   });
@@ -54,18 +57,18 @@ function loadExcel() {
 }
 
 function printScript(pixels, campaign_id) {
-	var phpScript = "php update_campaign_settings.php impressionPixels ";
+  var phpScript = "php update_campaign_settings.php impressionPixels ";
 
-	 var limiter = 1;
-	 var temp = "'";
+   var limiter = 1;
+   var temp = "'";
    var phrase = "src";
    var regex = /SRC=(.*)/;
 
-	for(idx in pixels){
+  for(idx in pixels){
     //dummy load will remove
     var $ = cheerio.load('');//(pixels[idx].replace(/^"(.+(?="$))"$/, '$1'));
 
-		
+    
     if($(pixels[idx]).attr('src')){
       temp += $(pixels[idx]).attr('src');
     }
@@ -73,15 +76,15 @@ function printScript(pixels, campaign_id) {
       temp+= pixels[idx];
     }
     
-		if (limiter < pixels.length) {
-        	temp += " ";
+    if (limiter < pixels.length) {
+          temp += " ";
       }
       limiter+=1;
-	}
-	temp+= "' ";
+  }
+  temp+= "' ";
 
-	console.log(phpScript + temp + campaign_id)
-	return phpScript + temp + campaign_id;
+  console.log(phpScript + temp + campaign_id)
+  return phpScript + temp + campaign_id;
 
 
   // var finalScript = "";
