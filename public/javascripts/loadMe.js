@@ -34,11 +34,16 @@ var main = function() {
           });
     }
     function printScript(script){
-      console.log(JSON.stringify(script))
       // for each (var item in script) {
       //   //console.log(item)
       // }
+script=script.script;
+var returnString = "<ul>"
+ for(var key in script){
 
-       $("#script").append(JSON.stringify(script.script))
+returnString+= "<li>" + script[key] +"</li>"
+      }
+      returnString += "</ul>"
+       $("#script").append(returnString)
     }
 };
