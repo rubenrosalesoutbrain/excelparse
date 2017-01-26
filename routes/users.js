@@ -42,15 +42,18 @@ function loadExcel() {
 				}
 			}
 		}
-		if (pixels.length > 0 && prev_campaign_id != 0 && prev_campaign_id !== campaign_id) {
+		if (pixels.length > 0) {
+			//console.log(prev_campaign_id)
 			if (store[campaign_id]) {
 				store[campaign_id] = store[campaign_id].concat(addPixels(pixels, campaign_id))
 			} else {
 				store[campaign_id] = addPixels(pixels, campaign_id)
 			}
 		}
+		//console.log(store,pixels)
 	});
 	//printResponse(store);
+
 	return store;
 }
 
