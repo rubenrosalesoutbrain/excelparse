@@ -48,13 +48,13 @@ function loadExcel() {
 			}
 		}
 		
-		if (prev_campaign_id != campaign_id) {
+		//if (prev_campaign_id != campaign_id) {
 			if (store[campaign_id]) {
 				store[campaign_id] = store[campaign_id].concat(addPixels(pixels, campaign_id))
 			} else {
 				store[campaign_id] = addPixels(pixels, campaign_id)
 			}
-		}
+		//}
 	});
 	printResponse(store);
 	return store;
