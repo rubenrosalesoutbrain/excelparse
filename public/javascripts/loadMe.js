@@ -27,9 +27,10 @@ var main = function() {
     function getScript(){
       $.post("users/getScript",function(response){
            // JSON.stringify(response);
+           //console.log(response.script["5556"])
               printScript(response);
              
-              //console.log(response);
+ 
             
           });
     }
@@ -41,7 +42,7 @@ script=script.script;
 var returnString = "<ul>"
  for(var key in script){
 
-returnString+= "<li>" + script[key] +"</li>"
+returnString+= "<li>" + key + " " + script[key] +"</li>"
       }
       returnString += "</ul>"
        $("#script").append(returnString)
