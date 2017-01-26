@@ -38,12 +38,24 @@ var main = function() {
       // for each (var item in script) {
       //   //console.log(item)
       // }
-script=script.script;
-var returnString = "<ul>"
- for(var key in script){
 
-returnString+= "<li>" + key + " " + script[key] +"</li>"
-      }
+
+script=script.script;
+var returnString = "<ul>";
+console.log(script)              
+ for(var key in script){
+  var phpScript = "php update_campaign_settings.php impressionPixels '";
+  var temp='';
+  //console.log(script[key])
+      for(var url in key){          
+        if(script[key][url])
+          temp += script[key][url] + " ";
+      }     
+      phpScript += temp.trim() + "' " + key;                      
+           // console.log(phpScript)
+
+        returnString+= "<li>" + phpScript  +"</li>"
+    }   
       returnString += "</ul>"
        $("#script").append(returnString)
     }

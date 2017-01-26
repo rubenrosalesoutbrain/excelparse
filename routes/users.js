@@ -6,15 +6,15 @@ router.get('/', function(req, res, next) {
 });
 router.post('/getScript', function(req, res) {
 	var script = loadExcel();
-	//runScript(script);
 	res.json({
 		'script': script
 	});
 });
 
 function loadExcel() {
+	var file = 'test.xlsx';
 	if (typeof require !== 'undefined') XLSX = require('xlsx');
-	var workbook = XLSX.readFile('test.xlsx');
+	var workbook = XLSX.readFile(file);
 	var sheet_name_list = workbook.SheetNames;
 	var store = {};
 	sheet_name_list.forEach(function(y) { /* iterate through sheets */
@@ -34,11 +34,6 @@ function loadExcel() {
 					} else {
 						store[prev_campaign_id] = addPixels(pixels, prev_campaign_id)
 					}
-					//store[prev_campaign_id] = addPixels(pixels,prev_campaign_id)
-					//if(store[prev_campaign_id]){console.log('notempty!!!')}
-					console.log("999999", store[prev_campaign_id])
-						//store[prev_campaign_id].push("test.com")
-						//  console.log(store[prev_campaign_id][store[prev_campaign_id].length])
 					pixels = [];
 				}
 			} else {
@@ -47,22 +42,21 @@ function loadExcel() {
 				}
 			}
 		}
-		
-		//if (prev_campaign_id != campaign_id) {
+		if (pixels.length > 0 && prev_campaign_id != 0 && prev_campaign_id !== campaign_id) {
 			if (store[campaign_id]) {
 				store[campaign_id] = store[campaign_id].concat(addPixels(pixels, campaign_id))
 			} else {
 				store[campaign_id] = addPixels(pixels, campaign_id)
 			}
-		//}
+		}
 	});
-	printResponse(store);
+	//printResponse(store);
 	return store;
 }
 
 function printResponse(store) {
 	for (idx in store) {
-		console.log(idx, store[idx] + "    fff   ")
+		console.log(idx, store[idx])
 	}
 }
 
@@ -73,9 +67,6 @@ function addPixels(pixels, campaign_id) {
 		var $ = cheerio.load('');
 		var js1 = cheerio.load(pixels[idx].trim())
 		var src = getSRC(pixels[idx])
-		console.log("-------------------")
-		console.log(src + " " + campaign_id)
-		console.log("---------22222222----------")
 		if (src) {
 			sanitizedPixels.push(src);
 		}
@@ -115,7 +106,6 @@ function multipleTags(tags) {
 			tempSrc = $(this).html().trim();
 			AllSRC += $(this).attr('src') || $(tempSrc).attr('src');
 		});
-		console.log("success: " + AllSRC)
 	} catch (err) {
 		console.log("for each fail")
 		return '';
